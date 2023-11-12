@@ -11,6 +11,7 @@ var config_Groups = [["Room 1", 1, 2]["Room 2", 3, 9]]
 // Global variables
 var lightOn = "#1b9019"
 var lightOff = "#901919"
+var bConfigurationChecked = false;
 
 
 function ToggleState(lightID) {
@@ -131,35 +132,39 @@ function ChangeColorTemp(lightID)
 
 function InitCallback()
 {
-	// Check configuration
-	var configError = "";
-	if(typeof bridgeIP === 'undefined' || bridgeIP === "")
-		configError += "Bridge IP is not defined<br>"
-	if(typeof username === 'undefined' || username === "")
-		configError += "Username is not defined<br>"
-	if(typeof updateFrequency === 'undefined')
-		configError += "updateFrequency is not set<br>"
+	if(bConfigurationChecked === false)
+	{
+		// Check configuration
+		var configError = "";
+		if(typeof bridgeIP === 'undefined' || bridgeIP === "")
+			configError += "Bridge IP is not defined<br>"
+		if(typeof username === 'undefined' || username === "")
+			configError += "Username is not defined<br>"
+		if(typeof updateFrequency === 'undefined')
+			configError += "updateFrequency is not set<br>"
 
-	if(configError !== "")
-	{
-		document.getElementById("errors").innerHTML += configError;
-		document.getElementById("errors").style.display = "block";
-	}
-	else
-	{
-		if(updateFrequency < 0)
+		if(configError !== "")
 		{
-			console.log("updateFrequency set to 30 seconds")
-			updateFrequency = 30;
+			document.getElementById("errors").innerHTML += configError;
+			document.getElementById("errors").style.display = "block";
+			return 0
 		}
 
+		if(updateFrequency < 1)
+		{
+			console.log("Update frequency to fast, set to 30 seconds")
+			updateFrequency = 30;
+		}
+		
 		// Update displayed values every x seconds
 		setInterval(InitCallback, updateFrequency * 1000)
-
-		fetch("http://" + bridgeIP + "/api/" + username + "/lights/")
+		bConfigurationChecked = true
+	}
+	
+	fetch("http://" + bridgeIP + "/api/" + username + "/lights/")
 			.then((response) => response.json())
 			.then((json) => Init(json));
-	}
+	
 }
 
 function Init(json)

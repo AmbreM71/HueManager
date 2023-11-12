@@ -50,6 +50,7 @@ body {
 .lights {
 	border: 2px solid white;
 	border-radius: 10px;
+	min-height: 40px;
 }
 
 .groupName {
