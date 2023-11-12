@@ -1,0 +1,142 @@
+@font-face {
+	font-family : 'LouisGeorgeCafe';
+	src: url('LouisGeorgeCafe.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
+:root {
+	--background:#201221;
+}
+
+::selection  {
+	background-color: #704073;
+}
+
+* {
+	margin:0;
+	font-family: LouisGeorgeCafe;
+	box-sizing: border-box;
+	transition:0.2s;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:visited {
+	color:inherit;
+}
+
+body {
+	margin:20px;
+	background-color:var(--background);
+	color:#f7eff7;
+}
+
+.group {
+	width:600px;
+	margin:0 auto 40px auto;
+}
+
+.groupHeader {
+	display: inline-flex;
+	padding-bottom: 10px;
+}
+
+.GroupOnOffButton {
+	margin:0px !important;
+}
+
+.lights {
+	border: 2px solid white;
+	border-radius: 10px;
+}
+
+.groupName {
+	font-weight: bold;
+	font-size: 150%;
+	margin-right: 10px;
+}
+
+.title {
+	font-size:300%;
+	margin-bottom: 50px;
+	font-weight: bold;
+	text-align:center;
+}
+
+.LightName {
+	font-weight: bold;
+	text-align: center;
+}
+
+.light * {
+	display:block;
+}
+
+.light {
+	padding:10px;
+	border-bottom:1px solid white;
+}
+
+.light:last-of-type {
+	border:0;
+}
+
+.Sliders {
+	display:flex;
+	margin: 10px 0;
+}
+
+.ColorTempLabel, .BrightnessLabel {
+	width:290px;
+	text-align: center;
+}
+
+.Brightness, .ColorTemp {
+	width: 270px;
+	margin:10px auto 0 auto;
+}
+
+input[type=range] {
+	height: 10px;
+	border-radius: 5px;
+	width:250px;
+}
+
+input[type=range]::-moz-range-thumb {
+	width: 15px;
+	height: 15px;
+	background: #fff;
+	cursor: pointer;
+}
+
+input[type=button] {
+	padding:5px 0px;
+	width:100px;
+	margin:20px auto 10px auto;
+	border:0;
+	border-radius: 5px;
+	font-weight: bolder;
+	color:white;
+	cursor: pointer;
+}
+
+.ColorTemp {
+	background: linear-gradient(90deg, rgba(100,197,214,1) 0%, rgba(255,255,255,1) 50%, rgba(255,156,0,1) 100%);
+}
+
+.Brightness {
+	background: linear-gradient(90deg, rgba(100,100,100,1) 0%, rgba(255,255,255,1) 100%);
+}
+
+#LastUpdate {
+	text-align: right;
+}
+
+.AmbreM {
+	background-image: linear-gradient(to right, red, yellow);
+  	color: transparent;
+  	background-clip: text;
+  	font-weight: bold;
+}
