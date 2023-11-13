@@ -16,7 +16,7 @@ var bConfigurationChecked = false;
 
 function ToggleState(lightID) {
 	var etat = document.getElementById(lightID).children["OnOffButton"].value;
-	if(etat == "Allumer")
+	if(etat == "Turn On")
 	{
 		var brightness = document.getElementById(lightID).children["Sliders"].children["BrightnessLabel"].children["Brightness"].value;
 		var colorTemp = document.getElementById(lightID).children["Sliders"].children["ColorTempLabel"].children["ColorTemp"].value;
@@ -32,21 +32,21 @@ function ToggleStates(groupID) {
 	var button = document.getElementById(groupID).children["groupHeader"].children["GroupOnOffButton"];
 	var etat = button.value;
 	var lights = document.getElementById(groupID).children["lights"];
-	if(etat === "Tout allumer") {
+	if(etat === "Turn on room") {
 		for(nIndex = 0; nIndex < lights.children.length; nIndex++) {
 			var light = document.getElementById(groupID).children["lights"].children[nIndex];
 			var brightness = light.children["Sliders"].children["BrightnessLabel"].children["Brightness"].value;
 			var colorTemp = light.children["Sliders"].children["ColorTempLabel"].children["ColorTemp"].value;
 			TurnOnLight(light.id, brightness, colorTemp);
 		}
-		button.value = "Tout éteindre";
+		button.value = "Turn off room";
 		button.style.backgroundColor = lightOn;
 	}
 	else {
 		for(nIndex = 0; nIndex < lights.children.length; nIndex++) {
 			TurnOffLight(document.getElementById(groupID).children["lights"].children[nIndex].id);
 		}
-		button.value = "Tout allumer";
+		button.value = "Turn on room";
 		button.style.backgroundColor = lightOff;
 	}
 }
@@ -65,14 +65,14 @@ function TurnOnLight(lightID, brightness, colorTemp)
 		}
 	});
 	var light = document.getElementById(lightID);
-	light.children["OnOffButton"].value = "Éteindre";
+	light.children["OnOffButton"].value = "Turn Off";
 	light.children["OnOffButton"].style.backgroundColor = lightOn;
 
 	// Check if all the lights of the room are turned on
 	if(isAllLightsOfGroupOn(light.parentNode.parentNode.id) === true)
 	{
 		button = light.parentNode.parentNode.children["groupHeader"].children["GroupOnOffButton"]
-		button.value = "Tout éteindre";
+		button.value = "Turn off room";
 		button.style.backgroundColor = lightOn;
 	}
 }
@@ -90,14 +90,14 @@ function TurnOffLight(lightID)
 		}
 	});
 	var light = document.getElementById(lightID);
-	light.children["OnOffButton"].value = "Allumer";
+	light.children["OnOffButton"].value = "Turn On";
 	light.children["OnOffButton"].style.backgroundColor = lightOff;
 
 	// Check if all the lights of the room are turned on
 	if(isAllLightsOfGroupOn(light.parentNode.parentNode.id) === false)
 	{
 		button = light.parentNode.parentNode.children["groupHeader"].children["GroupOnOffButton"]
-		button.value = "Tout allumer";
+		button.value = "Turn on room";
 		button.style.backgroundColor = lightOff;
 	}
 }
@@ -132,6 +132,7 @@ function ChangeColorTemp(lightID)
 
 function InitCallback()
 {
+	console.log("InitCallback")
 	if(bConfigurationChecked === false)
 	{
 		// Check configuration
@@ -159,6 +160,7 @@ function InitCallback()
 		// Update displayed values every x seconds
 		setInterval(InitCallback, updateFrequency * 1000)
 		bConfigurationChecked = true
+		console.log("Configuration OK");
 	}
 	
 	fetch("http://" + bridgeIP + "/api/" + username + "/lights/")
@@ -178,7 +180,7 @@ function Init(json)
 		"<div class=\"group\" id=\"" + config_Groups[nGroup][0] + "\">" +
         	"<div name=\"groupHeader\" class=\"groupHeader\">" +
             	"<div class=\"groupName\">" + config_Groups[nGroup][0] + "</div>" +
-            	"<input class=\"GroupOnOffButton\" name=\"GroupOnOffButton\" type=\"button\" value=\"Tout allumer\" onclick=\"ToggleStates('" + config_Groups[nGroup][0] + "')\">" +
+            	"<input class=\"GroupOnOffButton\" name=\"GroupOnOffButton\" type=\"button\" value=\"Turn on room\" onclick=\"ToggleStates('" + config_Groups[nGroup][0] + "')\">" +
         	"</div>" +
         	"<div name=\"lights\" class=\"lights\"></div>" +
       	"</div>"
@@ -191,10 +193,10 @@ function Init(json)
 				"<div class=\"light\" id=\"" + config_Groups[nGroup][nLight] + "\">" + 
 	              "<div class=\"LightName\" name=\"LightName\"></div>" +
 	              "<div class=\"Sliders\" name=\"Sliders\">"+
-	                "<label class=\"BrightnessLabel\" name=\"BrightnessLabel\">Puissance <input name=\"Brightness\" class=\"Brightness\" type=\"range\" min=\"1\" max=\"255\" value=\"255\" onchange=\"ChangeBrightness(" + config_Groups[nGroup][nLight] + ")\"></label>"+
-	                "<label class=\"ColorTempLabel\" name=\"ColorTempLabel\">Température <input name=\"ColorTemp\" class=\"ColorTemp\" type=\"range\" onchange=\"ChangeColorTemp(" + config_Groups[nGroup][nLight] + ")\"></label>"+
+	                "<label class=\"BrightnessLabel\" name=\"BrightnessLabel\">Brightness <input name=\"Brightness\" class=\"Brightness\" type=\"range\" min=\"1\" max=\"255\" value=\"255\" onchange=\"ChangeBrightness(" + config_Groups[nGroup][nLight] + ")\"></label>"+
+	                "<label class=\"ColorTempLabel\" name=\"ColorTempLabel\">Color temperature <input name=\"ColorTemp\" class=\"ColorTemp\" type=\"range\" onchange=\"ChangeColorTemp(" + config_Groups[nGroup][nLight] + ")\"></label>"+
 	              "</div>"+
-	              "<input name=\"OnOffButton\" type=\"button\" value=\"Allumer\" onclick=\"ToggleState(" + config_Groups[nGroup][nLight] + ")\">"+
+	              "<input name=\"OnOffButton\" type=\"button\" value=\"Turn On\" onclick=\"ToggleState(" + config_Groups[nGroup][nLight] + ")\">"+
 	            "</div>"
 		}
 	}
@@ -225,12 +227,12 @@ function Init(json)
 
 		if(isAllLightsOfGroupOn(GroupsList[nGroupIndex].id) === true)
 		{
-			GroupsList[nGroupIndex].children["groupHeader"].children["GroupOnOffButton"].value = "Tout éteindre";
+			GroupsList[nGroupIndex].children["groupHeader"].children["GroupOnOffButton"].value = "Turn off room";
 			GroupsList[nGroupIndex].children["groupHeader"].children["GroupOnOffButton"].style.backgroundColor = lightOn;
 		}
 		else
 		{
-			GroupsList[nGroupIndex].children["groupHeader"].children["GroupOnOffButton"].value = "Tout allumer";
+			GroupsList[nGroupIndex].children["groupHeader"].children["GroupOnOffButton"].value = "Turn on room";
 			GroupsList[nGroupIndex].children["groupHeader"].children["GroupOnOffButton"].style.backgroundColor = lightOff;
 		}
 
@@ -242,11 +244,11 @@ function Init(json)
 function setOnOffValue(light, json)
 {
 	if(json[light.id].state.on === false) {
-		light.children["OnOffButton"].value = "Allumer";
+		light.children["OnOffButton"].value = "Turn On";
 		light.children["OnOffButton"].style.backgroundColor = lightOff;
 	}
 	else {
-		light.children["OnOffButton"].value = "Éteindre";
+		light.children["OnOffButton"].value = "Turn Off";
 		light.children["OnOffButton"].style.backgroundColor = lightOn;
 	}
 }
@@ -271,7 +273,7 @@ function setColorTemp(light, json)
 function isAllLightsOfGroupOn(groupID) {
 	var lightsGroup = document.getElementById(groupID);
 	for (var nIndex = 0; nIndex < lightsGroup.children["lights"].children.length; nIndex++) {
-		if(lightsGroup.children["lights"].children[nIndex].children["OnOffButton"].value === "Allumer")
+		if(lightsGroup.children["lights"].children[nIndex].children["OnOffButton"].value === "Turn On")
 		{
 			return false;
 		}
